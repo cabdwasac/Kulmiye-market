@@ -871,33 +871,6 @@ renderProducts();
    
 
 
-document.getElementById("year").textContent=new Date().getFullYear();
-
-database.ref("products").on("value", function(snapshot){
- firebaseProducts = [];
-
- snapshot.forEach(function(child){
-  const product = child.val();
-
-  if(product){
-   firebaseProducts.unshift({
-    ...product,
-    id: child.key
-   });
-  }
- });
-
- renderProducts();
-
-}, function(error){
- console.error("Firebase error:", error);
- alert("Alaabta Firebase lagama soo akhrin karin.");
-});
-
-renderCategories();
-renderProducts();
-
-
 </script>
 
 </body>
