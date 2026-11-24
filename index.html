@@ -763,7 +763,7 @@ function showDetails(id){
 }
 
 
-document.getElementById("sellForm").addEventListener("submit", async function(e){
+document.getElementById("sellForm").reset();addEventListener("submit", async function(e){
  e.preventDefault();
 
  if(!auth.currentUser){
