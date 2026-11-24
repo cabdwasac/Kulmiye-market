@@ -1,0 +1,730 @@
+
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087d43">
+<meta name="description" content="Kulmiye Jigjiga Online Market - Iibso, iibi, kuna xayeysiiso alaabtaada Jigjiga.">
+<title>Kulmiye | Jigjiga Online Market</title>
+
+<style>
+:root{
+ --green:#087d43;
+ --dark:#075c32;
+ --light:#eaf7ef;
+ --white:#ffffff;
+ --text:#17251d;
+ --muted:#718078;
+ --border:#e5eee8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+ font-family:Arial,sans-serif;
+ background:#f5f8f6;
+ color:var(--text);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{
+ background:var(--green);
+ color:white;
+ padding:16px;
+ position:sticky;
+ top:0;
+ z-index:10;
+ box-shadow:0 2px 10px #0002;
+}
+.header-inner{
+ max-width:1100px;
+ margin:auto;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+}
+.logo{font-size:21px;font-weight:900;line-height:1.2}
+.logo small{display:block;font-size:10px;letter-spacing:1px;margin-top:4px}
+.header-btn{
+ background:white;
+ color:var(--green);
+ border:0;
+ border-radius:8px;
+ padding:11px 14px;
+ font-weight:bold;
+}
+main{max-width:1100px;margin:auto;padding:15px}
+.hero{
+ background:linear-gradient(135deg,#087d43,#034b29);
+ color:white;
+ padding:28px 20px;
+ border-radius:15px;
+ margin:10px 0 20px;
+}
+.hero h1{font-size:27px;margin-bottom:10px}
+.hero p{font-size:14px;line-height:1.7;color:#e4f5e9}
+.search{
+ display:flex;
+ background:white;
+ border-radius:10px;
+ padding:5px;
+ margin-top:20px;
+ gap:5px;
+}
+.search input{
+ width:100%;
+ min-width:0;
+ border:0;
+ outline:none;
+ padding:12px 8px;
+}
+.search button{
+ background:var(--green);
+ color:white;
+ border:0;
+ border-radius:8px;
+ padding:0 17px;
+}
+.section-title{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin:22px 0 13px;
+}
+.section-title h2{font-size:19px}
+.categories{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:10px;
+}
+.category{
+ border:1px solid var(--border);
+ background:white;
+ border-radius:12px;
+ padding:13px 4px;
+ text-align:center;
+ color:var(--text);
+}
+.category .emoji{font-size:25px;display:block;margin-bottom:7px}
+.category span:last-child{font-size:11px;font-weight:bold}
+.category.active{
+ border:2px solid var(--green);
+ background:var(--light);
+}
+.products{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;
+}
+.product{
+ background:white;
+ border:1px solid var(--border);
+ border-radius:12px;
+ overflow:hidden;
+ cursor:pointer;
+}
+.product img{
+ width:100%;
+ height:145px;
+ object-fit:cover;
+ background:var(--light);
+}
+.product-info{padding:11px}
+.product-info h3{
+ font-size:14px;
+ margin-bottom:7px;
+ overflow-wrap:anywhere;
+}
+.price{
+ color:var(--green);
+ font-weight:900;
+ font-size:16px;
+}
+.location{
+ color:var(--muted);
+ font-size:11px;
+ margin-top:7px;
+}
+.tag{
+ display:inline-block;
+ background:var(--light);
+ color:var(--green);
+ font-size:10px;
+ padding:5px 8px;
+ border-radius:20px;
+ margin-bottom:7px;
+}
+.empty{
+ background:white;
+ border-radius:12px;
+ padding:35px 15px;
+ text-align:center;
+ color:var(--muted);
+ grid-column:1/-1;
+}
+.sell-banner{
+ background:#e7f5eb;
+ border:1px solid #ccebd6;
+ border-radius:13px;
+ padding:18px;
+ margin:25px 0;
+}
+.sell-banner h2{color:var(--dark);font-size:19px}
+.sell-banner p{font-size:13px;color:#52675a;margin:9px 0}
+.primary{
+ background:var(--green);
+ color:white;
+ border:0;
+ padding:13px 18px;
+ border-radius:9px;
+ font-weight:bold;
+}
+footer{
+ background:#064b2a;
+ color:white;
+ text-align:center;
+ padding:25px 15px;
+ margin-top:30px;
+ font-size:13px;
+ line-height:2;
+}
+footer a{color:white}
+.modal{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:#0009;
+ z-index:30;
+ padding:15px;
+ overflow-y:auto;
+ align-items:flex-start;
+ justify-content:center;
+}
+.modal.show{display:flex}
+.modal-box{
+ width:100%;
+ max-width:500px;
+ background:white;
+ padding:20px;
+ border-radius:14px;
+ margin:auto;
+}
+.modal-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:18px;
+}
+.close{
+ border:0;
+ background:#edf2ee;
+ border-radius:50%;
+ width:34px;
+ height:34px;
+ font-size:20px;
+}
+.field{margin-bottom:13px}
+.field label{
+ display:block;
+ font-size:13px;
+ font-weight:bold;
+ margin-bottom:7px;
+}
+.field input,.field select,.field textarea{
+ width:100%;
+ padding:12px;
+ border:1px solid #dce6df;
+ border-radius:8px;
+ outline:none;
+ background:white;
+}
+.field input:focus,.field textarea:focus,.field select:focus{
+ border-color:var(--green);
+}
+.field textarea{min-height:90px;resize:vertical}
+.form-submit{width:100%;margin-top:5px}
+.details-image{
+ width:100%;
+ height:230px;
+ object-fit:cover;
+ border-radius:10px;
+}
+.details-info{line-height:1.8;font-size:14px}
+.details-info h2{margin:12px 0}
+.whatsapp{
+ display:block;
+ background:#168b45;
+ color:white;
+ text-decoration:none;
+ text-align:center;
+ padding:13px;
+ border-radius:9px;
+ font-weight:bold;
+ margin-top:15px;
+}
+.delete-btn{
+ background:#fff0f0;
+ color:#c22;
+ border:0;
+ border-radius:8px;
+ padding:10px;
+ margin-top:10px;
+}
+.notice{
+ background:#fff8df;
+ color:#775a0b;
+ padding:12px;
+ border-radius:8px;
+ font-size:12px;
+ line-height:1.6;
+ margin-bottom:15px;
+}
+.hidden{display:none!important}
+@media(min-width:650px){
+ .products{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .product img{height:190px}
+ .hero{padding:45px}
+ .hero h1{font-size:36px}
+ .categories{grid-template-columns:repeat(8,1fr)}
+}
+@media(min-width:950px){
+ .products{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="header-inner">
+  <div class="logo">
+   KULMIYE
+   <small>JIGJIGA ONLINE MARKET</small>
+  </div>
+  <button class="header-btn" onclick="openSell()">
+   + Iibi
+  </button>
+ </div>
+</header>
+
+<main>
+
+ <section class="hero">
+  <h1>Ku soo dhawoow Kulmiye Market!</h1>
+  <p>
+   Hal meel oo aad ka iibsan karto ama ku iibin karto
+   alaabaha kala duwan ee magaalada Jigjiga.
+  </p>
+
+  <div class="search">
+   <input id="searchInput"
+    type="search"
+    placeholder="Maxaad raadineysaa?"
+    oninput="renderProducts()">
+   <button onclick="renderProducts()">Raadi</button>
+  </div>
+ </section>
+
+ <div class="section-title">
+  <h2>Qaybaha ganacsiga</h2>
+ </div>
+
+ <section class="categories" id="categories"></section>
+
+ <div class="section-title">
+  <h2 id="productHeading">Alaabihii ugu dambeeyay</h2>
+  <span style="font-size:12px;color:#718078" id="productCount"></span>
+ </div>
+
+ <section class="products" id="products"></section>
+
+ <section class="sell-banner">
+  <h2>Ma haysataa alaab aad iibinayso?</h2>
+  <p>
+   Ku soo bandhig Kulmiye Market si dadka Jigjiga
+   ay u arkaan alaabtaada.
+  </p>
+  <button class="primary" onclick="openSell()">
+   Soo geli xayeysiiskaaga +
+  </button>
+ </section>
+
+</main>
+
+<footer>
+ <h2>KULMIYE MARKET</h2>
+ Iibso • Iibi • Isku Xir
+ <p>Jigjiga, Somali Region, Ethiopia</p>
+ <p>© <span id="year"></span> Kulmiye Market. All rights reserved.</p>
+ <p>Ganacsigaaga ku soo bandhig Kulmiye.</p>
+</footer>
+
+<!-- SELL FORM -->
+<div class="modal" id="sellModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h2>Soo geli xayeysiis</h2>
+   <button class="close" onclick="closeModal('sellModal')">×</button>
+  </div>
+
+  <div class="notice">
+   Fadlan geli xog sax ah iyo sawirka alaabtaada.
+   Xayeysiiska tijaabada ah wuxuu ku kaydsamayaa
+   browser-ka telefoonkaaga.
+  </div>
+
+  <form id="sellForm">
+   <div class="field">
+    <label>Magaca alaabta</label>
+    <input id="itemName" required maxlength="80"
+     placeholder="Tusaale: Samsung A15">
+   </div>
+
+   <div class="field">
+    <label>Qaybta alaabta</label>
+    <select id="itemCategory" required>
+     <option value="">Dooro qaybta</option>
+     <option>Electronics</option>
+     <option>Fashion</option>
+     <option>Vehicles</option>
+     <option>Guryo iyo dhul</option>
+     <option>Furniture</option>
+     <option>Groceries</option>
+     <option>Qalabka dhismaha</option>
+     <option>Adeegyo</option>
+     <option>Waxyaabo kale</option>
+    </select>
+   </div>
+
+   <div class="field">
+    <label>Qiimaha (Birr)</label>
+    <input id="itemPrice" type="number"
+     min="0" step="0.01" required placeholder="Tusaale: 15000">
+   </div>
+
+   <div class="field">
+    <label>Telefoonka iibiyaha</label>
+    <input id="itemPhone" type="tel"
+     required placeholder="Tusaale: 09XXXXXXXX">
+   </div>
+
+   <div class="field">
+    <label>Goobta</label>
+    <input id="itemLocation" required
+     value="Jigjiga" placeholder="Xaafadda ama goobta">
+   </div>
+
+   <div class="field">
+    <label>Sawirka alaabta</label>
+    <input id="itemImage" type="file"
+     accept="image/*" required>
+   </div>
+
+   <div class="field">
+    <label>Faahfaahin dheeraad ah</label>
+    <textarea id="itemDescription"
+     maxlength="1000"
+     placeholder="Faahfaahinta alaabta..."></textarea>
+   </div>
+
+   <button type="submit" class="primary form-submit">
+    Soo geli xayeysiiska
+   </button>
+  </form>
+ </div>
+</div>
+
+<!-- PRODUCT DETAILS -->
+<div class="modal" id="detailsModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h2>Faahfaahinta alaabta</h2>
+   <button class="close" onclick="closeModal('detailsModal')">×</button>
+  </div>
+  <div id="detailsContent"></div>
+ </div>
+</div>
+	
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+
+<script>
+	
+const firebaseConfig = {
+  
+
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const auth = firebase.auth();
+
+const categories = [
+
+const firebaseConfig = {
+  
+
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const auth = firebase.auth();
+
+const categories = [
+
+const categories = [
+ {name:"Dhammaan",icon:"🛍️"},
+ {name:"Electronics",icon:"📱"},
+ {name:"Fashion",icon:"👕"},
+ {name:"Vehicles",icon:"🚗"},
+ {name:"Guryo iyo dhul",icon:"🏠"},
+ {name:"Furniture",icon:"🛋️"},
+ {name:"Groceries",icon:"🛒"},
+ {name:"Qalabka dhismaha",icon:"🔨"},
+ {name:"Adeegyo",icon:"🧰"},
+ {name:"Waxyaabo kale",icon:"📦"}
+];
+
+let selectedCategory="Dhammaan";
+
+const sampleProducts = [
+ {
+  id:"sample1",
+  name:"Samsung Smartphone",
+  category:"Electronics",
+  price:15000,
+  phone:"0946050412",
+  location:"Jigjiga",
+  description:"Tusaale alaab ah. Xayeysiiskan waa muunad.",
+  image:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600",
+  sample:true
+ },
+ {
+  id:"sample2",
+  name:"Kabo cusub",
+  category:"Fashion",
+  price:1800,
+  phone:"0946050412",
+  location:"Jigjiga",
+  description:"Tusaale kabo ah oo lagu muujinayo website-ka.",
+  image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600",
+  sample:true
+ },
+ {
+  id:"sample3",
+  name:"Sofa casri ah",
+  category:"Furniture",
+  price:22000,
+  phone:"0946050412",
+  location:"Jigjiga",
+  description:"Tusaale alaab guri ah.",
+  image:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600",
+  sample:true
+ },
+ {
+  id:"sample4",
+  name:"Baabuur",
+  category:"Vehicles",
+  price:850000,
+  phone:"0946050412",
+  location:"Jigjiga",
+  description:"Tusaale gaari ah.",
+  image:"https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600",
+  sample:true
+ }
+];
+
+function getProducts(){
+ try{
+  const saved=JSON.parse(localStorage.getItem("kulmiyeProducts")||"[]");
+  return [...saved,...sampleProducts];
+ }catch(e){
+  return sampleProducts;
+ }
+}
+
+function saveProducts(products){
+ localStorage.setItem("kulmiyeProducts",JSON.stringify(products));
+}
+
+function renderCategories(){
+ const container=document.getElementById("categories");
+ container.innerHTML=categories.map(c=>`
+  <button class="category ${selectedCategory===c.name?'active':''}"
+   onclick="chooseCategory('${c.name}')">
+   <span class="emoji">${c.icon}</span>
+   <span>${c.name}</span>
+  </button>
+ `).join("");
+}
+
+function chooseCategory(category){
+ selectedCategory=category;
+ renderCategories();
+ renderProducts();
+}
+
+function renderProducts(){
+ const products=getProducts();
+ const search=document.getElementById("searchInput").value.toLowerCase().trim();
+
+ const filtered=products.filter(p=>{
+  const categoryMatch=selectedCategory==="Dhammaan"||p.category===selectedCategory;
+  const searchMatch=(p.name+" "+p.category+" "+p.location+" "+p.description)
+   .toLowerCase().includes(search);
+  return categoryMatch&&searchMatch;
+ });
+
+ document.getElementById("productHeading").textContent=
+  selectedCategory==="Dhammaan"?"Alaabihii ugu dambeeyay":selectedCategory;
+
+ document.getElementById("productCount").textContent=
+  filtered.length+" alaabood";
+
+ const container=document.getElementById("products");
+
+ if(filtered.length===0){
+  container.innerHTML=`
+   <div class="empty">
+    <div style="font-size:35px">🔎</div>
+    <h3>Wax alaab ah lama helin</h3>
+    <p style="margin-top:8px">Isku day inaad eray kale raadiso.</p>
+   </div>`;
+  return;
+ }
+
+ container.innerHTML=filtered.map(p=>`
+  <article class="product" onclick="showDetails('${p.id}')">
+   <img src="${escapeHTML(p.image)}"
+    alt="${escapeHTML(p.name)}"
+    onerror="this.src='https://placehold.co/500x350/eaf7ef/087d43?text=Kulmiye+Market'">
+   <div class="product-info">
+    <span class="tag">${escapeHTML(p.category)}</span>
+    <h3>${escapeHTML(p.name)}</h3>
+    <div class="price">${Number(p.price).toLocaleString()} Birr</div>
+    <div class="location">📍 ${escapeHTML(p.location)}</div>
+   </div>
+  </article>
+ `).join("");
+}
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,char=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#039;"
+ }[char]));
+}
+
+function openSell(){
+ document.getElementById("sellModal").classList.add("show");
+}
+
+function closeModal(id){
+ document.getElementById(id).classList.remove("show");
+}
+
+function showDetails(id){
+ const product=getProducts().find(p=>String(p.id)===String(id));
+ if(!product)return;
+
+ const phone=product.phone.replace(/\D/g,"");
+ const whatsappNumber=phone.startsWith("0")
+  ?"251"+phone.substring(1)
+  :phone;
+
+ document.getElementById("detailsContent").innerHTML=`
+  <img class="details-image"
+   src="${escapeHTML(product.image)}"
+   alt="${escapeHTML(product.name)}"
+   onerror="this.src='https://placehold.co/500x350/eaf7ef/087d43?text=Kulmiye+Market'">
+
+  <div class="details-info">
+   <span class="tag">${escapeHTML(product.category)}</span>
+   <h2>${escapeHTML(product.name)}</h2>
+   <div class="price">${Number(product.price).toLocaleString()} Birr</div>
+   <p>📍 ${escapeHTML(product.location)}</p>
+   <p>📞 ${escapeHTML(product.phone)}</p>
+   <p style="margin-top:12px">${escapeHTML(product.description)}</p>
+  </div>
+
+  <a class="whatsapp"
+   href="https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Salaan, waxaan ka arkay '+product.name+' Kulmiye Market. Weli ma iib baa?')}"
+   target="_blank" rel="noopener">
+   La xiriir iibiyaha WhatsApp
+  </a>
+
+  ${product.sample?"<p style='font-size:11px;color:#888;margin-top:12px'>Tani waa xayeysiis tusaale ah.</p>":""}
+ `;
+
+ document.getElementById("detailsModal").classList.add("show");
+}
+
+document.getElementById("sellForm").addEventListener("submit",async function(e){
+ e.preventDefault();
+
+ const file=document.getElementById("itemImage").files[0];
+ if(!file){
+  alert("Fadlan sawirka alaabta geli.");
+  return;
+ }
+
+ if(file.size>2*1024*1024){
+  alert("Sawirku aad buu u weyn yahay. Dooro sawir ka yar 2MB.");
+  return;
+ }
+
+ const phone=document.getElementById("itemPhone").value.trim();
+ if(!/^[0-9+\s-]{9,16}$/.test(phone)){
+  alert("Fadlan geli lambar telefoon oo sax ah.");
+  return;
+ }
+
+ const reader=new FileReader();
+
+ reader.onload=()=>{
+  const product={
+   id:Date.now().toString(),
+   name:document.getElementById("itemName").value.trim(),
+   category:document.getElementById("itemCategory").value,
+   price:Number(document.getElementById("itemPrice").value),
+   phone:phone,
+   location:document.getElementById("itemLocation").value.trim(),
+   description:document.getElementById("itemDescription").value.trim(),
+   image:reader.result,
+   sample:false
+  };
+
+  try{
+   const saved=JSON.parse(localStorage.getItem("kulmiyeProducts")||"[]");
+   saved.unshift(product);
+   saveProducts(saved);
+
+   document.getElementById("sellForm").reset();
+   closeModal("sellModal");
+   selectedCategory="Dhammaan";
+   renderCategories();
+   renderProducts();
+
+   alert("Xayeysiiska waa lagu daray browser-kan. Tani weli ma aha daabacaad internetka oo qof walba arki karo.");
+   window.scrollTo({top:0,behavior:"smooth"});
+  }catch(error){
+   alert("Kaydinta waa fashilantay. Isku day sawir ka yar ama tirtir xogta browser-ka.");
+  }
+ };
+
+ reader.onerror=()=>{
+  alert("Sawirka lama akhrin karin. Isku day sawir kale.");
+ };
+
+ reader.readAsDataURL(file);
+});
+
+document.getElementById("year").textContent=new Date().getFullYear();
+
+renderCategories();
+renderProducts();
+</script>
+
+</body>
+</html>
