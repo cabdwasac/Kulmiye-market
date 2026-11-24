@@ -762,10 +762,18 @@ function showDetails(id){
  document.getElementById("detailsModal").classList.add("show");
 }
 
-document.getElementById("sellForm").addEventListener("submit",async function(e){
+
+document.getElementById("sellForm").addEventListener("submit", async function(e){
  e.preventDefault();
 
+ if(!auth.currentUser){
+  alert("Fadlan marka hore gal akoonkaaga.");
+  openAccount();
+  return;
+ }
+
  const file=document.getElementById("itemImage").files[0];
+
  if(!file){
   alert("Fadlan sawirka alaabta geli.");
   return;
@@ -777,6 +785,7 @@ document.getElementById("sellForm").addEventListener("submit",async function(e){
  }
 
  const phone=document.getElementById("itemPhone").value.trim();
+
  if(!/^[0-9+\s-]{9,16}$/.test(phone)){
   alert("Fadlan geli lambar telefoon oo sax ah.");
   return;
@@ -784,23 +793,48 @@ document.getElementById("sellForm").addEventListener("submit",async function(e){
 
  const reader=new FileReader();
 
- reader.onload=()=>{
-  const product={
-   id:Date.now().toString(),
-   name:document.getElementById("itemName").value.trim(),
-   category:document.getElementById("itemCategory").value,
-   price:Number(document.getElementById("itemPrice").value),
-   phone:phone,
-   location:document.getElementById("itemLocation").value.trim(),
-   description:document.getElementById("itemDescription").value.trim(),
-   image:reader.result,
-   sample:false
-  };
-
+ reader.onload=async function(){
   try{
-   const saved=JSON.parse(localStorage.getItem("kulmiyeProducts")||"[]");
-   saved.unshift(product);
-   saveProducts(saved);
+   const newProductRef=database.ref("products").push();
+
+   const product={
+    id:newProductRef.key,
+    name:document.getElementById("itemName").value.trim(),
+    category:document.getElementById("itemCategory").value,
+    price:Number(document.getElementById("itemPrice").value),
+    phone:phone,
+    location:document.getElementById("itemLocation").value.trim(),
+    description:document.getElementById("itemDescription").value.trim(),
+    image:reader.result,
+    ownerUid:auth.currentUser.uid,
+    createdAt:Date.now(),
+    sample:false
+   };
+
+   await newProductRef.set(product);
+
+   document.getElementById("sellForm").reset();
+   closeModal("sellModal");
+
+   selectedCategory="Dhammaan";
+   renderCategories();
+
+   alert("Hambalyo! Xayeysiiskaaga Firebase ayaa lagu kaydiyey.");
+
+   window.scrollTo({top:0,behavior:"smooth"});
+
+  }catch(error){
+   console.error(error);
+   alert("Xayeysiiska lama kaydin. Hubi internetka iyo akoonkaaga.");
+  }
+ };
+
+ reader.onerror=function(){
+  alert("Sawirka lama akhrin karin. Isku day sawir kale.");
+ };
+
+ reader.readAsDataURL(file);
+});
 
    document.getElementById("sellForm").reset();
    closeModal("sellModal");
