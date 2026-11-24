@@ -813,7 +813,7 @@ document.getElementById("sellForm").addEventListener("submit", async function(e)
 
    await newProductRef.set(product);
 
-   document.getElementById("sellForm").reset();
+   document.("sellForm").reset();
    closeModal("sellModal");
 
    selectedCategory="Dhammaan";
@@ -836,28 +836,10 @@ document.getElementById("sellForm").addEventListener("submit", async function(e)
  reader.readAsDataURL(file);
 });
 
-   document.getElementById("sellForm").reset();
-   closeModal("sellModal");
-   selectedCategory="Dhammaan";
-   renderCategories();
-   renderProducts();
+   
 
-   alert("Xayeysiiska waa lagu daray browser-kan. Tani weli ma aha daabacaad internetka oo qof walba arki karo.");
-   window.scrollTo({top:0,behavior:"smooth"});
-  }catch(error){
-   alert("Kaydinta waa fashilantay. Isku day sawir ka yar ama tirtir xogta browser-ka.");
-  }
- };
-
- reader.onerror=()=>{
-  alert("Sawirka lama akhrin karin. Isku day sawir kale.");
- };
-
- reader.readAsDataURL(file);
-});
 
 document.getElementById("year").textContent=new Date().getFullYear();
-
 
 database.ref("products").on("value", function(snapshot){
  firebaseProducts = [];
@@ -882,6 +864,7 @@ database.ref("products").on("value", function(snapshot){
 
 renderCategories();
 renderProducts();
+
 
 </script>
 
