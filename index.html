@@ -801,6 +801,38 @@ async function openMyAds(){
  }
 
 	}
+	async function deleteMyAd(id){
+
+ const user = auth.currentUser;
+
+ if(!user){
+  alert("Fadlan marka hore gal akoonkaaga.");
+  return;
+ }
+
+ const confirmDelete = confirm("Ma hubtaa inaad tirtirayso xayeysiiskan?");
+
+ if(!confirmDelete){
+  return;
+ }
+
+ try{
+
+  await database.ref("products").child(id).remove();
+
+  alert("Xayeysiiska si guul leh ayaa loo tirtiray.");
+
+  openMyAds();
+
+ }catch(error){
+
+  console.error("Delete error:", error);
+
+  alert("Xayeysiiska lama tirtiri karin. Waxaa laga yaabaa in rukhsadda Firebase aan weli la oggolaan.");
+
+ }
+
+	}
 function showDetails(id){
  const product=getProducts().find(p=>String(p.id)===String(id));
  if(!product)return;
