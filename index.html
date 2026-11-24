@@ -763,78 +763,110 @@ function showDetails(id){
 }
 
 
-document.getElementById("sellForm").reset();addEventListener("submit", async function(e){
+
+document.getElementById("sellForm").addEventListener("submit", async function(e){
  e.preventDefault();
 
- if(!auth.currentUser){
+ const user = auth.currentUser;
+
+ if(!user){
   alert("Fadlan marka hore gal akoonkaaga.");
   openAccount();
   return;
  }
 
- const file=document.getElementById("itemImage").files[0];
+ const file = document.getElementById("itemImage").files[0];
 
  if(!file){
   alert("Fadlan sawirka alaabta geli.");
   return;
  }
 
- if(file.size>2*1024*1024){
+ if(file.size > 2*1024*1024){
   alert("Sawirku aad buu u weyn yahay. Dooro sawir ka yar 2MB.");
   return;
  }
 
- const phone=document.getElementById("itemPhone").value.trim();
+ const phone = document.getElementById("itemPhone").value.trim();
 
  if(!/^[0-9+\s-]{9,16}$/.test(phone)){
   alert("Fadlan geli lambar telefoon oo sax ah.");
   return;
  }
 
- const reader=new FileReader();
+ const reader = new FileReader();
 
- reader.onload=async function(){
+ reader.onload = async function(){
   try{
-   const newProductRef=database.ref("products").push();
+   const newProductRef = database.ref("products").push();
 
-   const product={
-    id:newProductRef.key,
-    name:document.getElementById("itemName").value.trim(),
-    category:document.getElementById("itemCategory").value,
-    price:Number(document.getElementById("itemPrice").value),
-    phone:phone,
-    location:document.getElementById("itemLocation").value.trim(),
-    description:document.getElementById("itemDescription").value.trim(),
-    image:reader.result,
-    ownerUid:auth.currentUser.uid,
-    createdAt:Date.now(),
-    sample:false
+   const product = {
+    id: newProductRef.key,
+    name: document.getElementById("itemName").value.trim(),
+    category: document.getElementById("itemCategory").value,
+    price: Number(document.getElementById("itemPrice").value),
+    phone: phone,
+    location: document.getElementById("itemLocation").value.trim(),
+    description: document.getElementById("itemDescription").value.trim(),
+    image: reader.result,
+    ownerUid: user.uid,
+    createdAt: Date.now(),
+    sample: false
    };
 
    await newProductRef.set(product);
 
-   document.("sellForm").reset();
+   document.getElementById("sellForm").reset();
    closeModal("sellModal");
 
-   selectedCategory="Dhammaan";
+   selectedCategory = "Dhammaan";
    renderCategories();
 
    alert("Hambalyo! Xayeysiiskaaga Firebase ayaa lagu kaydiyey.");
 
-   window.scrollTo({top:0,behavior:"smooth"});
+   window.scrollTo({top:0, behavior:"smooth"});
 
   }catch(error){
-   console.error(error);
-   alert("Xayeysiiska lama kaydin. Hubi internetka iyo akoonkaaga.");
+   console.error("Kaydinta qalad:", error);
+   alert("Xayeysiiska lama kaydin. Hubi internetka iyo rukhsadda Firebase.");
   }
  };
 
- reader.onerror=function(){
+ reader.onerror = function(){
   alert("Sawirka lama akhrin karin. Isku day sawir kale.");
  };
 
  reader.readAsDataURL(file);
 });
+
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+
+database.ref("products").on("value", function(snapshot){
+ firebaseProducts = [];
+
+ snapshot.forEach(function(child){
+  const product = child.val();
+
+  if(product){
+   firebaseProducts.unshift({
+    ...product,
+    id: child.key
+   });
+  }
+ });
+
+ renderProducts();
+
+}, function(error){
+ console.error("Firebase error:", error);
+ alert("Alaabta Firebase lagama soo akhrin karin.");
+});
+
+
+renderCategories();
+renderProducts();
 
    
 
