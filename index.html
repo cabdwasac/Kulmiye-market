@@ -744,7 +744,63 @@ document.getElementById("accountForm").addEventListener("submit", async function
   }
  }
 });
+async function openMyAds(){
 
+ const user = auth.currentUser;
+
+ if(!user){
+  alert("Fadlan marka hore gal akoonkaaga.");
+  openAccount();
+  return;
+ }
+
+ const container = document.getElementById("myAdsContent");
+
+ container.innerHTML = "<p>Fadlan sug, xayeysiisyadaada waa la soo rarayaa...</p>";
+
+ document.getElementById("myAdsModal").classList.add("show");
+
+ try{
+
+  const snapshot = await database.ref("products")
+   .orderByChild("ownerUid")
+   .equalTo(user.uid)
+   .once("value");
+
+  if(!snapshot.exists()){
+   container.innerHTML = "<p>Weli wax xayeysiis ah ma aadan gelin.</p>";
+   return;
+  }
+
+  let html = "";
+
+  snapshot.forEach(function(child){
+
+   const p = child.val();
+
+   html += `
+    <div style="border:1px solid #ddd;padding:12px;margin-bottom:12px;border-radius:10px">
+     <strong>${escapeHTML(p.name)}</strong>
+     <p>${Number(p.price).toLocaleString()} Birr</p>
+     <button onclick="deleteMyAd('${child.key}')"
+      style="background:#d93025;color:white;border:0;padding:9px 15px;border-radius:6px">
+      Tirtir
+     </button>
+    </div>
+   `;
+
+  });
+
+  container.innerHTML = html;
+
+ }catch(error){
+
+  console.error(error);
+  container.innerHTML = "<p>Cilad ayaa dhacday markii xayeysiisyada la soo rarayay.</p>";
+
+ }
+
+	}
 function showDetails(id){
  const product=getProducts().find(p=>String(p.id)===String(id));
  if(!product)return;
