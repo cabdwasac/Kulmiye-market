@@ -445,6 +445,48 @@ footer a{color:white}
  </div>
 </div>
 	
+<!-- ACCOUNT MODAL -->
+<div class="modal" id="accountModal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h2 id="accountTitle">Akoonkayga</h2>
+   <button class="close" onclick="closeModal('accountModal')">×</button>
+  </div>
+
+  <div class="notice">
+   Samee akoon ama gal akoonkaaga KULMIYE MARKET.
+  </div>
+
+  <form id="accountForm">
+   <div class="field">
+    <label>Email</label>
+    <input id="accountEmail" type="email"
+     required placeholder="Geli email-kaaga">
+   </div>
+
+   <div class="field">
+    <label>Password</label>
+    <input id="accountPassword" type="password"
+     required minlength="6"
+     placeholder="Ugu yaraan 6 xaraf">
+   </div>
+
+   <button type="submit" class="primary form-submit"
+    id="accountSubmit">
+    Gal Akoonka
+   </button>
+  </form>
+
+  <p style="text-align:center;margin-top:18px">
+   <span id="accountSwitchText">Akoon ma lihid?</span>
+   <button type="button" onclick="setAuthMode()"
+    style="border:0;background:none;color:#087d43;font-weight:bold">
+    Samee akoon
+   </button>
+  </p>
+ </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
