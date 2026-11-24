@@ -672,6 +672,61 @@ function closeModal(id){
  document.getElementById(id).classList.remove("show");
 }
 
+let authMode = "login";
+
+function openAccount(){
+ document.getElementById("accountModal").classList.add("show");
+}
+
+function setAuthMode(){
+ authMode = authMode === "login" ? "signup" : "login";
+
+ document.getElementById("accountTitle").textContent =
+  authMode === "login" ? "Akoonkaaga gal" : "Akoon cusub samee";
+
+ document.getElementById("accountSubmit").textContent =
+  authMode === "login" ? "Gal Akoonka" : "Samee Akoon";
+
+ document.getElementById("accountSwitchText").textContent =
+  authMode === "login" ? "Akoon ma lihid?" : "Akoon ma leedahay?";
+
+ document.querySelector("#accountModal p button").textContent =
+  authMode === "login" ? "Samee akoon" : "Gal akoonkaaga";
+}
+
+document.getElementById("accountForm").addEventListener("submit", async function(e){
+ e.preventDefault();
+
+ const email = document.getElementById("accountEmail").value.trim();
+ const password = document.getElementById("accountPassword").value;
+
+ try{
+  if(authMode === "login"){
+   await auth.signInWithEmailAndPassword(email, password);
+   alert("Si guul leh ayaad akoonka u gashay.");
+  }else{
+   await auth.createUserWithEmailAndPassword(email, password);
+   alert("Akoonkaaga si guul leh ayaa loo sameeyey.");
+  }
+
+  closeModal("accountModal");
+  document.getElementById("accountForm").reset();
+
+ }catch(error){
+  if(error.code === "auth/email-already-in-use"){
+   alert("Email-kan akoon ayaa horay loogu sameeyey.");
+  }else if(error.code === "auth/invalid-email"){
+   alert("Email-ka aad gelisay sax ma aha.");
+  }else if(error.code === "auth/weak-password"){
+   alert("Password-ku waa inuu ugu yaraan 6 xaraf ahaadaa.");
+  }else if(error.code === "auth/invalid-credential"){
+   alert("Email ama password ayaa khaldan.");
+  }else{
+   alert("Cilad ayaa dhacday: " + error.message);
+  }
+ }
+});
+
 function showDetails(id){
  const product=getProducts().find(p=>String(p.id)===String(id));
  if(!product)return;
