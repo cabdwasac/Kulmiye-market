@@ -580,17 +580,10 @@ const sampleProducts = [
  }
 ];
 
-function getProducts(){
- try{
-  const saved=JSON.parse(localStorage.getItem("kulmiyeProducts")||"[]");
-  return [...saved,...sampleProducts];
- }catch(e){
-  return sampleProducts;
- }
-}
+let firebaseProducts = [];
 
-function saveProducts(products){
- localStorage.setItem("kulmiyeProducts",JSON.stringify(products));
+function getProducts(){
+ return [...firebaseProducts, ...sampleProducts];
 }
 
 function renderCategories(){
